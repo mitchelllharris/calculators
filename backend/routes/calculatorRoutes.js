@@ -3,15 +3,11 @@ const router = express.Router();
 const Calculator = require('../models/Calculator');
 const { evaluate } = require('mathjs');
 
-// POST request to save a calculation
+// --- Save a calculation ---
 router.post('/', async (req, res) => {
     try {
         const { result, expression } = req.body;
-        const newCalculation = new Calculator({
-            result,
-            expression,
-        });
-
+        const newCalculation = new Calculator({ result, expression });
         const savedCalculation = await newCalculation.save();
         res.status(201).json(savedCalculation);
     } catch (error) {
@@ -19,7 +15,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-// POST request to evaluate an expression
+// --- Evaluate an expression ---
 router.post('/evaluate', (req, res) => {
     const { expression } = req.body;
     try {
@@ -30,10 +26,10 @@ router.post('/evaluate', (req, res) => {
     }
 });
 
-// GET request to retrieve all calculations
+// --- Get all calculations ---
 router.get('/', async (req, res) => {
     try {
-        const calculations = await Calculator.find().sort({}, { createdAt: -1 });
+        const calculations = await Calculator.find().sort({ createdAt: -1 });
         res.status(200).json(calculations);
     } catch (error) {
         res.status(400).json({ message: 'Error retrieving calculations', error });
